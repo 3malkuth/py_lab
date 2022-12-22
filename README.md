@@ -1,5 +1,9 @@
 # py_lab
 
+## Cloud Environments
+* Heroku is cool, but sql costs...
+* Try firebase, google cloud, aws etc.
+
 ## Run tests
 * First enter the pip environment
 ```
