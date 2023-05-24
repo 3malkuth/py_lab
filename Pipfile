@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+atlassian-python-api = "*"
+jira = "*"
+flask = "*"
+mailjet-rest = "*"
+sendgrid = "*"
+
+[dev-packages]
+pytest = "*"
+types-requests = "*"
+mypy = "*"
+
+[requires]
+python_version = "3.10"

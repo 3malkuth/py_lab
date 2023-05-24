@@ -1,0 +1,10 @@
+/conf
+/.pytest_cache
+/.mypy_cache
+/build
+*.csv
+
+# IDE
+/.idea
+py_lab.iml
+/atlassian_lab/.mypy_cache/
