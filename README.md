@@ -6,8 +6,8 @@
 * TODO: Move to aws
 
 ## Check Type Safety
-* By default type safety is now setup in python 3.6+
-  * However at some stage they may change this or switch it off...
+* By default, type safety is now setup in python 3.6+
+  * However, at some stage they may change this or switch it off...
   * So you don't have to explicitly import typing
 * In the main py_lab folder run
 ```
@@ -68,7 +68,7 @@ pip3 install pipenv
 
 ### Path
 * Path
-  * You may need to add pip3 etc to the PATH
+  * You may need to add pip3 etc. to the PATH
   * May be found in ~/.local/bin
   * Add the following to .bashrc
 ```
@@ -80,15 +80,16 @@ echo $PYTHONPATH
 ```
 * Python Path
   * NB! You may need to set the python path...
-  * Many of the modules here are dependent on other modules outside of their module hierarchy
+  * Many of the modules here are dependent on other external modules
+    * external to the current module hierarchy
     * Therefore, you will need to...
 ```
 export PYTHONPATH=~/path/to/py_lab
 ```
 
-### Setup the pip virtual environment
+### Set up the pip virtual environment
 * **Go to the pylab folder**
-  * cd...
+  * cd ...
 * Open Pipfile and check if the python version is correct
   * You may want to check and upgrade if necessary other libraries etc.
 * Setup Python dependencies
