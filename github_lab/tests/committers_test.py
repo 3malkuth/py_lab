@@ -5,7 +5,8 @@ import json
 
 
 # @pytest.mark.skip
-@pytest.mark.itest
+# @pytest.mark.itest
+@pytest.mark.skip("Integration Test")
 def test_it_should_get_committers() -> None:
     config = configparser.ConfigParser()
     config.read('./conf/gh.conf')
@@ -24,6 +25,7 @@ def test_it_should_get_committers() -> None:
     print(resp_dict.keys())  # prints keys in dictionary
     print(resp_dict.get('sha'))
     print("__________________________")
-    assert True
+    assert str_repo == 'py_lab'
 
 # pytest ./github_lab/tests/committers_test.py::test_it_should_get_committers -rA
+# assert True

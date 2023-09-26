@@ -7,14 +7,20 @@ from jira import JIRA
 
 from atlassian_lab.team_velocity.team_velocity_calc import write_to_csv, get_sprint_data
 
-
+DELIVERED_VELOCITY = 'Delivered Velocity'
+SPRINT_2 = 'Sprint 2'
+COMMITTED_VELOCITY = 'Committed Velocity'
+SPRINT_1 = 'Sprint 1'
+TEAM_A = 'Team A'
+TEAM_B = 'Team B'
+TEAM_C = 'Team C'
 @pytest.fixture
 def mock_jira():
     jira = MagicMock(spec=JIRA)
     jira.sprints.return_value = [
-        create_mock_sprint('Team A', 10, 8, date.today()),
-        create_mock_sprint('Team B', 15, 12, date.today() - timedelta(days=3)),
-        create_mock_sprint('Team C', 20, 18, date.today() - timedelta(days=5))
+        create_mock_sprint(TEAM_A, 10, 8, date.today()),
+        create_mock_sprint(TEAM_B, 15, 12, date.today() - timedelta(days=3)),
+        create_mock_sprint(TEAM_C, 20, 18, date.today() - timedelta(days=5))
     ]
     return jira
 
@@ -39,22 +45,22 @@ def get_sprint_data(mock_jira):
 
     # Verify the output
     assert len(sprint_data) == 2
-    assert sprint_data[0]['Team'] == 'Team A'
-    assert sprint_data[0]['Sprint'] == 'Sprint 1'
-    assert sprint_data[0]['Committed Velocity'] == '10'
-    assert sprint_data[0]['Delivered Velocity'] == '8'
-    assert sprint_data[1]['Team'] == 'Team B'
+    assert sprint_data[0]['Team'] == TEAM_A
+    assert sprint_data[0]['Sprint'] == SPRINT_1
+    assert sprint_data[0][COMMITTED_VELOCITY] == '10'
+    assert sprint_data[0][DELIVERED_VELOCITY] == '8'
+    assert sprint_data[1]['Team'] == TEAM_B
     assert sprint_data[1]['Sprint'] == 'Sprint 2'
-    assert sprint_data[1]['Committed Velocity'] == '15'
-    assert sprint_data[1]['Delivered Velocity'] == '12'
+    assert sprint_data[1][COMMITTED_VELOCITY] == '15'
+    assert sprint_data[1][DELIVERED_VELOCITY] == '12'
 
 
 # @pytest.mark.utest
 def test_write_to_csv(tmpdir):
     # Test data
     data = [
-        {'Team': 'Team A', 'Sprint': 'Sprint 1', 'Committed Velocity': '10', 'Delivered Velocity': '8'},
-        {'Team': 'Team B', 'Sprint': 'Sprint 2', 'Committed Velocity': '15', 'Delivered Velocity': '12'}
+        {'Team': 'Team A', 'Sprint': SPRINT_1, COMMITTED_VELOCITY: '10', DELIVERED_VELOCITY: '8'},
+        {'Team': 'Team B', 'Sprint': SPRINT_2, COMMITTED_VELOCITY: '15', DELIVERED_VELOCITY: '12'}
     ]
 
     # Call the function
@@ -68,11 +74,11 @@ def test_write_to_csv(tmpdir):
 
     # Verify the output
     assert len(rows) == 2
-    assert rows[0]['Team'] == 'Team A'
-    assert rows[0]['Sprint'] == 'Sprint 1'
-    assert rows[0]['Committed Velocity'] == '10'
-    assert rows[0]['Delivered Velocity'] == '8'
-    assert rows[1]['Team'] == 'Team B'
-    assert rows[1]['Sprint'] == 'Sprint 2'
-    assert rows[1]['Committed Velocity'] == '15'
-    assert rows[1]['Delivered Velocity'] == '12'
+    assert rows[0]['Team'] == TEAM_A
+    assert rows[0]['Sprint'] == SPRINT_1
+    assert rows[0][COMMITTED_VELOCITY] == '10'
+    assert rows[0][DELIVERED_VELOCITY] == '8'
+    assert rows[1]['Team'] == TEAM_B
+    assert rows[1]['Sprint'] == SPRINT_2
+    assert rows[1][COMMITTED_VELOCITY] == '15'
+    assert rows[1][DELIVERED_VELOCITY] == '12'
