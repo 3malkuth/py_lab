@@ -1,11 +1,11 @@
-import pytest
 import csv
-from datetime import date, datetime, timedelta
-from jira import JIRA
+from datetime import date, timedelta
 from unittest.mock import MagicMock
 
-from atlassian_lab.team_velocity.team_velocity_calc import write_to_csv, get_sprint_data
+import pytest
+from jira import JIRA
 
+from atlassian_lab.team_velocity.team_velocity_calc import write_to_csv, get_sprint_data
 
 
 @pytest.fixture
@@ -18,6 +18,7 @@ def mock_jira():
     ]
     return jira
 
+
 def create_mock_sprint(board_name, committed_points, completed_points, end_date):
     sprint = MagicMock()
     sprint.raw = {
@@ -28,11 +29,12 @@ def create_mock_sprint(board_name, committed_points, completed_points, end_date)
     sprint.endDate.date.return_value = end_date
     return sprint
 
-#@pytest.mark.utest
-#def test_get_sprint_data(mock_jira):
+
+# @pytest.mark.utest
+# def test_get_sprint_data(mock_jira):
 def get_sprint_data(mock_jira):
     # Call the function with mock Jira server
-    #sprint_data = get_sprint_data('http://mock-jira-server', 'username', 'password')
+    # sprint_data = get_sprint_data('http://mock-jira-server', 'username', 'password')
     sprint_data = get_sprint_data(mock_jira)
 
     # Verify the output
@@ -45,7 +47,9 @@ def get_sprint_data(mock_jira):
     assert sprint_data[1]['Sprint'] == 'Sprint 2'
     assert sprint_data[1]['Committed Velocity'] == '15'
     assert sprint_data[1]['Delivered Velocity'] == '12'
-#@pytest.mark.utest
+
+
+# @pytest.mark.utest
 def test_write_to_csv(tmpdir):
     # Test data
     data = [

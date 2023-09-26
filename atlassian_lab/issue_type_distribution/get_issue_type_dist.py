@@ -56,7 +56,7 @@ def get_key_type_spoints_dict(issue: dict) -> dict:
 
     type_unfiltered: str = issue.get('fields').get('issuetype').get('name')
     print(type_unfiltered)
-    #type_updated: str = 'Other' if type_unfiltered != 'Story' or type_unfiltered != 'Task' or type_unfiltered != 'Bug'\
+    # type_updated: str = 'Other' if type_unfiltered != 'Story' or type_unfiltered != 'Task' or type_unfiltered != 'Bug'\
     #    else type_unfiltered
     type_updated: str = type_unfiltered if type_unfiltered == 'Story' or type_unfiltered == 'Task' or type_unfiltered == 'Bug' \
         else 'Other'
