@@ -26,6 +26,3 @@ def test_it_should_get_committers() -> None:
     print(resp_dict.get('sha'))
     print("__________________________")
     assert str_repo == 'py_lab'
-
-# pytest ./github_lab/tests/committers_test.py::test_it_should_get_committers -rA
-# assert True

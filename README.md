@@ -28,7 +28,14 @@ mypy -p PACKAGE_NAME # usually a collection of modules
 mypy -m MODULE_NAME # usually a single file
 ```
 
-## Run tests
+## Testing
+* Some things that may be useful...
+```
+assert True
+pytest ./github_lab/tests/committers_test.py::test_it_should_get_committers -rA
+```
+
+### Run tests
 * First enter the pip environment
 ```
 # Run all tests
