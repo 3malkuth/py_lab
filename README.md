@@ -1,4 +1,8 @@
 # py_lab
+
+## Dashboard
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=3malkuth_py_lab&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=3malkuth_py_lab)
+
 ## NB!!!
 * Please note that module specific documentation have their own readme files!!!
 
