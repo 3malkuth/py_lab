@@ -1,37 +1,59 @@
+import configparser
 import csv
-from typing import List, Dict
-from jira import JIRA
+import requests
 
 
-#def get_sprint_data(jira_url: str, username: str, password: str, jira: any) -> List[Dict[str, str]]:
-def get_sprint_data(jira: any) -> List[Dict[str, str]]:
-    # Connect to Jira
-    # jira = JIRA(server=jira_url, basic_auth=(username, password))
+def get_sprint_data() -> None:
+    config = configparser.ConfigParser()
+    # config.read(sys.argv[1]) # import sys & set config file on the command line
+    config.read('conf/atl.conf')
+    user: str = config['atl_api']['user']
+    api_token: str = config['atl_api']['api_token']
+    server: str = config['atl_api']['server']
 
-    # Get the last 7 completed sprints
-    completed_sprints = jira.search_issues(
-        f"project = YOUR_PROJECT AND type = Sprint AND sprint in closedSprints() ORDER BY Sprint DESC",
-        maxResults=7)
+    # Set the board ID and sprint range
+    board_id: str = config['atl_api']['board_id']
+
+    # Set the authentication credentials
+    auth: tuple = (user, api_token)
+
+    # Set the headers
+    headers: dict = {
+        "Accept": "application/json"
+    }
+
+    # Send a GET request to the API endpoint
+    response = requests.get(server + "/rest/greenhopper/1.0/rapid/charts/velocity?rapidViewId=" + board_id,
+                            auth=auth,
+                            headers=headers)
+    response_dict: dict = response.json()
 
     sprint_data = []
 
-    for sprint in completed_sprints:
-        sprint_info = {
-            'Team': sprint.fields.customfield_10008,  # Replace customfield_10008 with your team custom field ID
-            'Sprint': sprint.fields.customfield_10007,  # Replace customfield_10007 with your sprint custom field ID
-            'Committed Velocity': str(sprint.fields.customfield_10010),
-            # Replace customfield_10010 with your committed velocity custom field ID
-            'Delivered Velocity': str(sprint.fields.customfield_10011)
-            # Replace customfield_10011 with your delivered velocity custom field ID
-        }
+    # print(response_dict['velocityStatEntries']['11570']['estimated']['text'])
 
+    for sprint in response_dict['sprints']:
+        sprint_id = '{}'.format(sprint['id'])
+
+        sprint_info = {
+            'id': sprint_id,
+            'name': sprint['name'],
+            'estimated': response_dict['velocityStatEntries'][sprint_id]['estimated']['text'],
+            'completed': response_dict['velocityStatEntries'][sprint_id]['completed']['text']
+        }
         sprint_data.append(sprint_info)
 
-    return sprint_data
+    # Print the response content
+    print(sprint_data)
+
+    # Export the data to a CSV file
+    tmpdir = ''
+    filename = tmpdir.join('sprint_data.csv')
+    write_to_csv(sprint_data, filename)
 
 
-def write_to_csv(data: List[Dict[str, str]], filename: str):
-    headers = ['Team', 'Sprint', 'Committed Velocity', 'Delivered Velocity']
+def write_to_csv(data: list[dict[str, str]], filename: str):
+    headers = ['id', 'name', 'estimated', 'completed']
 
     with open(filename, 'w', newline='') as file:
         writer = csv.DictWriter(file, fieldnames=headers)
