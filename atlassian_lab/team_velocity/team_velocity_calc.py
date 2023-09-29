@@ -15,22 +15,9 @@ def get_sprint_data() -> None:
     board_id: str = config['atl_api']['board_id']
 
     # Set the authentication credentials
-    auth: tuple = (user, api_token)
-
-    # Set the headers
-    headers: dict = {
-        "Accept": "application/json"
-    }
-
-    # Send a GET request to the API endpoint
-    response = requests.get(server + "/rest/greenhopper/1.0/rapid/charts/velocity?rapidViewId=" + board_id,
-                            auth=auth,
-                            headers=headers)
-    response_dict: dict = response.json()
+    response_dict = get_velocity_data(api_token, board_id, server, user)
 
     sprint_data = []
-
-    # print(response_dict['velocityStatEntries']['11570']['estimated']['text'])
 
     for sprint in response_dict['sprints']:
         sprint_id = '{}'.format(sprint['id'])
@@ -50,6 +37,20 @@ def get_sprint_data() -> None:
     tmpdir = ''
     filename = tmpdir.join('sprint_data.csv')
     write_to_csv(sprint_data, filename)
+
+
+def get_velocity_data(api_token, board_id, server, user):
+    auth: tuple = (user, api_token)
+    # Set the headers
+    headers: dict = {
+        "Accept": "application/json"
+    }
+    # Send a GET request to the API endpoint
+    response = requests.get(server + "/rest/greenhopper/1.0/rapid/charts/velocity?rapidViewId=" + board_id,
+                            auth=auth,
+                            headers=headers)
+    response_dict: dict = response.json()
+    return response_dict
 
 
 def write_to_csv(data: list[dict[str, str]], filename: str):
