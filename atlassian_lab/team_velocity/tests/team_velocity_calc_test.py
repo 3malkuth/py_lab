@@ -13,10 +13,10 @@ def mock_requests_get(mocker):  # 'mocker' is injected by pytest-mock
 
 def test_it_should_get_velocity_data(mock_requests_get):
     # Define test parameters
-    server = 'https://example.com'
-    board_id = '123'
+    server: str = 'https://example.com'
+    board_id: str = '123'
     api_token: str = '2893rz423ngb34bbc4thn834'
-    user = 'user@example.com'
+    user: str = 'user@example.com'
 
     # Call the function to be tested
     result = get_velocity_data(api_token, board_id, server, user)

@@ -40,15 +40,15 @@ def get_sprint_data() -> None:
 
 
 def get_velocity_data(api_token, board_id, server, user):
-    auth: tuple = (user, api_token)
+    AUTH: tuple = (user, api_token)
     # Set the headers
-    headers: dict = {
+    HEADERS: dict = {
         "Accept": "application/json"
     }
     # Send a GET request to the API endpoint
     response = requests.get(server + "/rest/greenhopper/1.0/rapid/charts/velocity?rapidViewId=" + board_id,
-                            auth=auth,
-                            headers=headers)
+                            auth=AUTH,
+                            headers=HEADERS)
     response_dict: dict = response.json()
     return response_dict
 
