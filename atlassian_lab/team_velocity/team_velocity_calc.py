@@ -10,23 +10,24 @@ def get_sprint_data() -> None:
     user: str = config['atl_api']['user']
     api_token: str = config['atl_api']['api_token']
     server: str = config['atl_api']['server']
+    path_velocity: str = config['atl_api']['path_velocity']
 
     # Set the board ID and sprint range
     board_id: str = config['atl_api']['board_id']
 
     # Set the authentication credentials
-    response_dict = get_velocity_data(api_token, board_id, server, user)
+    response: dict = get_velocity_data(server + path_velocity + board_id, api_token, user)
 
     sprint_data = []
 
-    for sprint in response_dict['sprints']:
+    for sprint in response['resp_json']['sprints']:
         sprint_id = '{}'.format(sprint['id'])
 
         sprint_info = {
             'id': sprint_id,
             'name': sprint['name'],
-            'estimated': response_dict['velocityStatEntries'][sprint_id]['estimated']['text'],
-            'completed': response_dict['velocityStatEntries'][sprint_id]['completed']['text']
+            'estimated': response['resp_json']['velocityStatEntries'][sprint_id]['estimated']['text'],
+            'completed': response['resp_json']['velocityStatEntries'][sprint_id]['completed']['text']
         }
         sprint_data.append(sprint_info)
 
@@ -39,17 +40,32 @@ def get_sprint_data() -> None:
     write_to_csv(sprint_data, filename)
 
 
-def get_velocity_data(api_token, board_id, server, user):
+def get_velocity_data(url: str, api_token: str, user: str):
     AUTH: tuple = (user, api_token)
     # Set the headers
     HEADERS: dict = {
         "Accept": "application/json"
     }
     # Send a GET request to the API endpoint
-    response = requests.get(server + "/rest/greenhopper/1.0/rapid/charts/velocity?rapidViewId=" + board_id,
+    response = requests.get(url,
                             auth=AUTH,
                             headers=HEADERS)
-    response_dict: dict = response.json()
+
+    try:
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+        # print(f'HTTP error: {e}')
+        print(f'HTTP error: {e}')
+        response_dict: dict[str, int] = {
+            'resp_json': None,
+            'status_code': response.status_code,
+        }
+        return response_dict
+
+    response_dict: dict[str, int] = {
+        'resp_json': response.json(),
+        'status_code': response.status_code,
+    }
     return response_dict
 
 
